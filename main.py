@@ -1,4 +1,4 @@
-from prepare_data import load_csv, load_single_image_path, load_some_images
+from prepare_data import load_csv, load_some_images
 from deployment import predict_condition
 import keras
 
