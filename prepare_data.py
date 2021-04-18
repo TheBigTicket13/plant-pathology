@@ -63,6 +63,32 @@ def load_images(image_paths: tuple) -> tuple:
     return np.asarray(train_images), np.asarray(val_images), np.asarray(test_images)
 
 
+def load_single_image_path(image_path):
+    loaded_images = []
+
+    for i in range(len(image_path)):
+        img = cv2.imread(image_path[i])
+        img_resized = cv2.resize(img, (img.shape[1]//4, img.shape[0]//4))
+        if img_resized.shape[0] != 341 or img_resized.shape[1] != 512:
+            img_resized = cv2.resize(img, (512, 341))
+        loaded_images.append(img_resized)
+
+    return np.asarray(loaded_images)
+
+
+def load_some_images(image_path, loaded_amount):
+    loaded_images = []
+
+    for i in range(loaded_amount):
+        img = cv2.imread(image_path[i])
+        img_resized = cv2.resize(img, (img.shape[1]//4, img.shape[0]//4))
+        if img_resized.shape[0] != 341 or img_resized.shape[1] != 512:
+            img_resized = cv2.resize(img, (512, 341))
+        loaded_images.append(img_resized)
+
+    return np.asarray(loaded_images)
+
+
 
 
 

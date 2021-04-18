@@ -1,28 +1,23 @@
-from prepare_data import load_csv, shuffle_data, split_data, load_images
-from models import create_model
+from prepare_data import load_csv, load_single_image_path, load_some_images
 import cv2
-
+import keras
+import numpy as np
 
 if __name__ == "__main__":
+    trained_model = keras.models.load_model("./best_model")
     img_paths, one_hot_labels = load_csv()
+    images = load_some_images(img_paths, 15)
 
-    img_paths, one_hot_labels = shuffle_data(img_paths, one_hot_labels)
-    img_train_paths, img_val_paths, img_test_paths = split_data(img_paths, test_split=0.15)
-    one_hot_train, one_hot_val, one_hot_test = split_data(one_hot_labels, test_split=0.15)
+    for i in range(10):
+        cv2.imshow(f"window {i}", images[i])
+        print(f"Image nr {i}")
+        prediction = trained_model.predict(np.reshape(images[i], (-1, 341, 512, 3)))
+        np.argmax(prediction)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
 
-    train_images, val_images, test_images = load_images((img_train_paths, img_val_paths, img_test_paths))
-    '''
-    for i in range(200,len(train_images)):
-        #cv2.imshow("train_images", train_images[i])
-        print(one_hot_train[i])
-        cv2.waitKey(300)'''
 
-    model = create_model()
-    model.compile(optimizer="adam", loss="categorical_crossentropy", metrics=["accuracy", "mse"])
-    # model train wypieprza sie jak mam wiecej obrazow jak 200 do 500, pozniej nie wiem
-    # obrazy i labele wygladaja git
-    # cos jest nie tak ze zbiorem treningowym ma zly shape zamiast (375, 351,512,3) jest (375,)
-    model.fit(train_images, one_hot_train)
+
 
 
 
